@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Algo se acerca...</title>
+    <style>
+        /* Reinicio de estilos básicos */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            /* Un fondo oscuro y elegante que va con la campaña de intriga */
+            background-color: #0d0f12; 
+            /* Un degradado sutil radial para darle profundidad */
+            background-image: radial-gradient(circle at center, #1a1e24 0%, #0d0f12 100%);
+            color: #ffffff;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .container {
+            max-width: 900px;
+            padding: 20px;
+            width: 100%;
+        }
+
+        /* Espacio reservado para el logo transparente */
+        .logo-container {
+            margin-bottom: 50px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .logo {
+            /* Conserva la proporción exacta que mencionaste (1143 x 415) */
+            width: 100%;
+            max-width: 350px; /* Tamaño máximo para que no abrume la pantalla */
+            aspect-ratio: 1143 / 415;
+            object-fit: contain;
+            /* Filtro opcional: si el logo es de colores, puedes ponerle un filtro blanco/negro 
+               por ahora para mantener el misterio, y quitárselo en la semana 3 */
+            /* filter: grayscale(100%) brightness(200%); */
+        }
+
+        .teaser-text {
+            font-size: 2.5rem;
+            font-weight: 300;
+            margin-bottom: 40px;
+            letter-spacing: 3px;
+            color: #e0e0e0;
+        }
+
+        /* Estilos de la cuenta regresiva */
+        .countdown {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .time-box {
+            /* Efecto Glassmorphism (Cristal) */
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 25px 20px;
+            border-radius: 15px;
+            min-width: 130px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+
+        .time-box span {
+            font-size: 4.5rem;
+            font-weight: 700;
+            display: block;
+            margin-bottom: 5px;
+            background: linear-gradient(180deg, #ffffff 0%, #a0a0a0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .time-box p {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #888888;
+            font-weight: 600;
+        }
+
+        .sub-text {
+            margin-top: 50px;
+            font-size: 1.1rem;
+            color: #555555;
+            letter-spacing: 1px;
+        }
+
+        /* Diseño Responsivo para celulares */
+        @media (max-width: 600px) {
+            .teaser-text {
+                font-size: 1.8rem;
+                margin-bottom: 30px;
+            }
+            .countdown {
+                gap: 15px;
+            }
+            .time-box {
+                min-width: 100px;
+                padding: 15px;
+            }
+            .time-box span {
+                font-size: 3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Espacio del Logo de la USTA -->
+        <div class="logo-container">
+            <img src="logo_usta.png" alt="Logo" class="logo">
+        </div>
+
+        <!-- Mensaje de la campaña de expectativa -->
+        <h1 class="teaser-text">Algo va a suceder en la USTA...</h1>
+
+        <!-- Contenedor del reloj -->
+        <div class="countdown" id="countdown-container">
+            <div class="time-box">
+                <span id="days">00</span>
+                <p>Días</p>
+            </div>
+            <div class="time-box">
+                <span id="hours">00</span>
+                <p>Horas</p>
+            </div>
+            <div class="time-box">
+                <span id="minutes">00</span>
+                <p>Minutos</p>
+            </div>
+            <div class="time-box">
+                <span id="seconds">00</span>
+                <p>Segundos</p>
+            </div>
+        </div>
+
+        <!-- Texto sutil inferior -->
+        <p class="sub-text">Mantente atento a tu correo institucional.</p>
+    </div>
+
+    <!-- Script de la cuenta regresiva -->
+    <script>
+        // Fecha objetivo: 13 de Julio a las 08:00 a.m. (Hora de Colombia GMT-5)
+        // Formato ISO 8601 para asegurar que el navegador entienda la zona horaria
+        const targetDate = new Date("2026-07-13T08:00:00-05:00").getTime();
+
+        const countdownInterval = setInterval(() => {
+            const now = new Date().getTime();
+            const distance = targetDate - now;
+
+            // Cálculos de tiempo
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            // Si la cuenta llega a cero
+            if (distance < 0) {
+                clearInterval(countdownInterval);
+                document.getElementById("countdown-container").innerHTML = "<h2 style='font-size: 3rem; color: #fff;'>¡Los Encuentros Tomasinos han comenzado!</h2>";
+                return;
+            }
+
+            // Actualizar el HTML (añadiendo un '0' a la izquierda si el número es menor a 10)
+            document.getElementById("days").innerText = days.toString().padStart(2, '0');
+            document.getElementById("hours").innerText = hours.toString().padStart(2, '0');
+            document.getElementById("minutes").innerText = minutes.toString().padStart(2, '0');
+            document.getElementById("seconds").innerText = seconds.toString().padStart(2, '0');
+            
+        }, 1000); // Se actualiza cada 1 segundo
+    </script>
+
+</body>
+</html>
